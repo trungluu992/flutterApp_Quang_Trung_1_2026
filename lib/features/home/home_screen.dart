@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../cart/providers/cart_provider.dart';
 
 import 'providers/home_provider.dart';
 import 'widgets/category_card.dart';
 import 'widgets/food_card.dart';
 import 'widgets/restaurant_card.dart';
-
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -17,8 +18,41 @@ class HomeScreen extends ConsumerWidget {
     final restaurants = ref.watch(restaurantsProvider);
     final foods = ref.watch(foodsProvider);
 
+    final cartCount = ref.watch(cartItemCountProvider);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Food Delivery')),
+      appBar: AppBar(
+        title: const Text('Food Delivery'),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  context.go('/cart');
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
+
+              if (cartCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      cartCount.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

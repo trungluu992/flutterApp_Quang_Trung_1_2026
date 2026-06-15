@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../home/models/food.dart';
+import '../cart/providers/cart_provider.dart';
 
-class FoodDetailScreen extends StatelessWidget {
+class FoodDetailScreen extends ConsumerWidget {
   final Food food;
 
   const FoodDetailScreen({super.key, required this.food});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: Text(food.name)),
       body: SingleChildScrollView(
@@ -58,7 +60,13 @@ class FoodDetailScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ref.read(cartProvider.notifier).addToCart(food);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${food.name} added to cart')),
+                        );
+                      },
                       child: const Text('Add To Cart'),
                     ),
                   ),

@@ -7,6 +7,7 @@ import '../../features/splash/splash_screen.dart';
 
 import '../../features/food_detail/food_detail_screen.dart';
 import '../../features/home/models/food.dart';
+import '../../features/cart/cart_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -27,5 +28,7 @@ final appRouter = GoRouter(
         return FoodDetailScreen(food: food);
       },
     ),
+
+    GoRoute(path: '/cart', builder: (context, state) => const CartScreen()),
   ],
 );
