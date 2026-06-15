@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../cart/providers/cart_provider.dart';
 
 import 'providers/home_provider.dart';
+import 'providers/search_provider.dart';
+
 import 'widgets/category_card.dart';
 import 'widgets/food_card.dart';
 import 'widgets/restaurant_card.dart';
@@ -20,6 +22,12 @@ class HomeScreen extends ConsumerWidget {
 
     final cartCount = ref.watch(cartItemCountProvider);
 
+    final searchText = ref.watch(searchProvider);
+
+    final filteredFoods = foods.where((food) {
+      return food.name.toLowerCase().contains(searchText.toLowerCase());
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Food Delivery'),
@@ -32,7 +40,6 @@ class HomeScreen extends ConsumerWidget {
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),
-
               if (cartCount > 0)
                 Positioned(
                   right: 6,
@@ -59,6 +66,9 @@ class HomeScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              onChanged: (value) {
+                ref.read(searchProvider.notifier).state = value;
+              },
               decoration: InputDecoration(
                 hintText: 'Search food...',
                 prefixIcon: const Icon(Icons.search),
@@ -115,7 +125,15 @@ class HomeScreen extends ConsumerWidget {
 
             const SizedBox(height: 12),
 
-            ...foods.map(
+            if (filteredFoods.isEmpty)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text('No food found', style: TextStyle(fontSize: 18)),
+                ),
+              ),
+
+            ...filteredFoods.map(
               (food) => FoodCard(
                 food: food,
                 onTap: () {
