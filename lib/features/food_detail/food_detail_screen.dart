@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../home/models/food.dart';
 import '../cart/providers/cart_provider.dart';
+import '../../core/utils/currency_formatter.dart';
 
 class FoodDetailScreen extends ConsumerWidget {
   final Food food;
@@ -64,7 +65,9 @@ class FoodDetailScreen extends ConsumerWidget {
                         ref.read(cartProvider.notifier).addToCart(food);
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${food.name} added to cart')),
+                          SnackBar(
+                            content: Text(CurrencyFormatter.format(food.price)),
+                          ),
                         );
                       },
                       child: const Text('Add To Cart'),

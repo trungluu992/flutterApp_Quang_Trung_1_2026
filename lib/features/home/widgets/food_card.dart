@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/currency_formatter.dart';
 import '../models/food.dart';
 
 class FoodCard extends StatelessWidget {
@@ -28,7 +29,7 @@ class FoodCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('⭐ ${food.rating}'),
-            Text('\$${food.price.toStringAsFixed(2)}'),
+            Text(CurrencyFormatter.format(food.price)),
           ],
         ),
       ),
