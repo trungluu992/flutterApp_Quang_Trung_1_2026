@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'login_widgets/login_form.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.red,
-      body: Center(
-        child: Text(
-          'LOGIN',
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Center(child: SingleChildScrollView(child: LoginForm())),
         ),
       ),
     );
