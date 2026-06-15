@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../cart/providers/cart_provider.dart';
+import '../favorites/providers/favorites_provider.dart';
 
 import 'providers/home_provider.dart';
 import 'providers/search_provider.dart';
@@ -17,10 +18,14 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(categoriesProvider);
+
     final restaurants = ref.watch(restaurantsProvider);
+
     final foods = ref.watch(foodsProvider);
 
     final cartCount = ref.watch(cartItemCountProvider);
+
+    final favoritesCount = ref.watch(favoritesCountProvider);
 
     final searchText = ref.watch(searchProvider);
 
@@ -36,10 +41,39 @@ class HomeScreen extends ConsumerWidget {
             children: [
               IconButton(
                 onPressed: () {
+                  context.go('/favorites');
+                },
+                icon: const Icon(Icons.favorite),
+              ),
+
+              if (favoritesCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      favoritesCount.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
                   context.go('/cart');
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),
+
               if (cartCount > 0)
                 Positioned(
                   right: 6,

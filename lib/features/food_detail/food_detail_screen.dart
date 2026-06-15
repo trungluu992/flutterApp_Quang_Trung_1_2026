@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../home/models/food.dart';
-import '../cart/providers/cart_provider.dart';
 import '../../core/utils/currency_formatter.dart';
+import '../cart/providers/cart_provider.dart';
+import '../favorites/providers/favorites_provider.dart';
+import '../home/models/food.dart';
 
 class FoodDetailScreen extends ConsumerWidget {
   final Food food;
@@ -12,8 +13,22 @@ class FoodDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoritesProvider);
+
+    final isFavorite = favorites.any((item) => item.id == food.id);
+
     return Scaffold(
-      appBar: AppBar(title: Text(food.name)),
+      appBar: AppBar(
+        title: Text(food.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ref.read(favoritesProvider.notifier).toggleFavorite(food);
+            },
+            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -22,6 +37,7 @@ class FoodDetailScreen extends ConsumerWidget {
               height: 300,
               child: Image.asset(food.image, fit: BoxFit.cover),
             ),
+
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -45,7 +61,7 @@ class FoodDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
 
                   Text(
-                    '\$${food.price}',
+                    CurrencyFormatter.format(food.price),
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -65,9 +81,7 @@ class FoodDetailScreen extends ConsumerWidget {
                         ref.read(cartProvider.notifier).addToCart(food);
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(CurrencyFormatter.format(food.price)),
-                          ),
+                          SnackBar(content: Text('${food.name} added to cart')),
                         );
                       },
                       child: const Text('Add To Cart'),
