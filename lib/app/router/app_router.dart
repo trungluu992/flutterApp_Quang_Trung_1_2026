@@ -5,6 +5,9 @@ import '../../features/auth/register/register_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
+import '../../features/food_detail/food_detail_screen.dart';
+import '../../features/home/models/food.dart';
+
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
@@ -15,5 +18,14 @@ final appRouter = GoRouter(
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+
+    GoRoute(
+      path: '/food-detail',
+      builder: (context, state) {
+        final food = state.extra as Food;
+
+        return FoodDetailScreen(food: food);
+      },
+    ),
   ],
 );

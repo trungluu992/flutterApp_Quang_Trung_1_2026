@@ -6,6 +6,8 @@ import 'widgets/category_card.dart';
 import 'widgets/food_card.dart';
 import 'widgets/restaurant_card.dart';
 
+import 'package:go_router/go_router.dart';
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -80,7 +82,12 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 12),
 
             ...foods.map(
-              (food) => FoodCard(name: food.name, price: food.price),
+              (food) => FoodCard(
+                food: food,
+                onTap: () {
+                  context.go('/food-detail', extra: food);
+                },
+              ),
             ),
           ],
         ),
