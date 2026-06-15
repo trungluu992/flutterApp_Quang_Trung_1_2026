@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: Colors.red,
       body: Center(
         child: Text(
-          'HOME',
+          'LOGIN',
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
       ),
